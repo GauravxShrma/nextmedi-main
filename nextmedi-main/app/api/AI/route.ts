@@ -75,11 +75,9 @@ Return your findings in a clean, structured summary.
     fs.unlinkSync(tempPath);
 
     return NextResponse.json({ success: true, analysis: text });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("❌ Gemini Audio Analysis Error:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to analyze audio" },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "Failed to analyze audio";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
